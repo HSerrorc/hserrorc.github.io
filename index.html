@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HSerrorc 的 Minecraft 插件与资源作品集">
+    <title>HSerrorc | Minecraft 开发</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --paper: #edf0e6;
+            --ink: #252b24;
+            --muted: #657061;
+            --grass: #538544;
+            --grass-light: #81aa58;
+            --dirt: #80583e;
+            --line: #c8d0c0;
+            --stone: #dce1d5;
+            --pixel: "Courier New", monospace;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            color: var(--ink);
+            background: var(--paper);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-width: 320px;
+            background-color: var(--paper);
+            background-image: linear-gradient(90deg, rgb(91 117 78 / 4%) 1px, transparent 1px),
+                linear-gradient(rgb(91 117 78 / 4%) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+
+        a {
+            color: inherit;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        a:hover {
+            color: var(--grass);
+        }
+
+        .shell {
+            width: min(100% - 48px, 960px);
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            min-height: 72px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--line);
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--pixel);
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 14px;
+            height: 14px;
+            background: var(--grass);
+            box-shadow: 4px 0 var(--grass-light), 0 4px var(--grass-light), 4px 4px var(--dirt);
+            image-rendering: pixelated;
+        }
+
+        .topbar nav {
+            display: flex;
+            gap: 24px;
+            color: var(--muted);
+            font-family: var(--pixel);
+            font-size: 12px;
+        }
+
+        .topbar nav a {
+            text-decoration: none;
+        }
+
+        .hero {
+            display: grid;
+            min-height: 390px;
+            grid-template-columns: 1fr 230px;
+            align-items: center;
+            gap: 48px;
+            padding: 54px 0;
+            border-bottom: 2px solid var(--line);
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            color: var(--grass);
+            font-family: var(--pixel);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: var(--pixel);
+            font-size: 58px;
+            line-height: 1.15;
+        }
+
+        .intro {
+            max-width: 520px;
+            margin: 20px 0 26px;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .profile-link {
+            display: inline-flex;
+            min-height: 44px;
+            align-items: center;
+            padding: 0 16px;
+            border: 2px solid var(--ink);
+            background: var(--grass);
+            box-shadow: 4px 4px 0 var(--ink);
+            color: #fff;
+            font-family: var(--pixel);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .profile-link:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--ink);
+            color: #fff;
+        }
+
+        .block-scene {
+            position: relative;
+            width: 210px;
+            height: 210px;
+            justify-self: center;
+        }
+
+        .block-shadow {
+            position: absolute;
+            bottom: 0;
+            left: 18%;
+            width: 64%;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgb(55 68 43 / 28%) 0%,
+                rgb(55 68 43 / 15%) 45%, transparent 74%);
+            animation: block-shadow-breathe 3.2s ease-in-out infinite;
+        }
+
+        .block-image {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            image-rendering: pixelated;
+            transform: translateY(-8px);
+            animation: block-float 3.2s ease-in-out infinite;
+        }
+
+        @keyframes block-float {
+            0%, 100% {
+                transform: translateY(-8px);
+            }
+
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        @keyframes block-shadow-breathe {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(.85);
+                opacity: .65;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .block-image,
+            .block-shadow {
+                animation: none;
+            }
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 26px 0 14px;
+        }
+
+        h2 {
+            margin: 0;
+            font-family: var(--pixel);
+            font-size: 18px;
+        }
+
+        .section-note {
+            margin: 0;
+            color: var(--muted);
+            font-family: var(--pixel);
+            font-size: 11px;
+        }
+
+        .project-row {
+            display: grid;
+            grid-template-columns: 42px 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 0;
+            border-top: 2px solid var(--line);
+        }
+
+        .item-icon {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border: 2px solid #725239;
+            background: #b78658;
+            box-shadow: inset 0 0 0 4px #d0a573;
+            color: #493624;
+            font-family: var(--pixel);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .project-name {
+            margin: 0 0 4px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .project-description {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .project-status {
+            padding: 6px 8px;
+            border: 1px solid #a9b99e;
+            background: #e1e9d8;
+            color: #42643a;
+            font-family: var(--pixel);
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        footer {
+            display: flex;
+            min-height: 68px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 2px solid var(--line);
+            color: var(--muted);
+            font-family: var(--pixel);
+            font-size: 11px;
+        }
+
+        @media (max-width: 640px) {
+            .shell {
+                width: min(100% - 32px, 960px);
+            }
+
+            .topbar {
+                min-height: 62px;
+            }
+
+            .topbar nav {
+                gap: 12px;
+                font-size: 10px;
+            }
+
+            .hero {
+                min-height: 0;
+                grid-template-columns: 1fr;
+                gap: 26px;
+                padding: 44px 0 30px;
+            }
+
+            .block-scene {
+                order: -1;
+                width: 170px;
+                height: 170px;
+            }
+
+            .intro {
+                font-size: 15px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .project-row {
+                grid-template-columns: 38px 1fr;
+                gap: 12px;
+            }
+
+            .project-status {
+                grid-column: 2;
+                justify-self: start;
+            }
+
+            footer {
+                min-height: 62px;
+                flex-wrap: wrap;
+                padding: 14px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar shell">
+        <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>HSERRORC</a>
+        <nav aria-label="主导航">
+            <a href="#projects">项目</a>
+            <a href="https://github.com/HSerrorc">GitHub</a>
+        </nav>
+    </header>
+
+    <main id="top" class="shell">
+        <section class="hero" aria-labelledby="page-title">
+            <div>
+                <p class="eyebrow">你好啊，这里是</p>
+                <h1 id="page-title">HSerrorc</h1>
+                <p class="intro">制作 Minecraft 插件、和一些有趣的小玩意。</p>
+                <a class="profile-link" href="https://github.com/HSerrorc">查看 GitHub</a>
+            </div>
+            <div class="block-scene">
+                <div class="block-shadow" aria-hidden="true"></div>
+                <img class="block-image" src="assets/images/grass-block.png"
+                    alt="Minecraft 原版草方块" width="210" height="210">
+            </div>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-title">
+            <div class="section-heading">
+                <h2 id="projects-title">项目</h2>
+                <p class="section-note">正在制作中</p>
+            </div>
+            <article class="project-row">
+                <div class="item-icon" aria-hidden="true">TP</div>
+                <div>
+                    <h3 class="project-name">ToiletPoop</h3>
+                    <p class="project-description">Paper / Folia 插件 · 让玩家可以拉粑粑。</p>
+                </div>
+                <span class="project-status">开发中</span>
+            </article>
+        </section>
+    </main>
+
+    <footer class="shell">
+        <span>HSerrorc</span>
+        <span>Minecraft · Plugins · Resources</span>
+    </footer>
+</body>
+</html>
